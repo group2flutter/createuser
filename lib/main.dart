@@ -62,9 +62,23 @@ class _CreateNewUserPageState extends State<CreateNewUserPage> {
               ),
               obscureText: _obscurePassword,
             ),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Retype Password',
+                contentPadding: EdgeInsets.all(9.0)
+              ),
+              onChanged: (value) => _confirmPassword = value,
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed:() {
+                if (_formKey.currentState!.validate()){}
+              }, 
+              child: const Text('New User')),
           ],
         ),
       ),
     );
   }
 }
+
