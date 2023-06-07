@@ -27,7 +27,7 @@ class _CreateNewUserPageState extends State<CreateNewUserPage> {
   late String _email;
   late String _password;
   late String _confirmPassword;
-   final _passwordController = TextEditingController();
+  final _passwordController = TextEditingController();
   final _retypePasswordController = TextEditingController();
   bool _obscurePassword = true;
 
@@ -42,7 +42,8 @@ class _CreateNewUserPageState extends State<CreateNewUserPage> {
         child: Column(
           children: [
             TextFormField(
-              decoration: InputDecoration(labelText: 'Firstname',contentPadding:EdgeInsets.all(9.0)),
+              decoration: InputDecoration(
+                  labelText: 'Firstname', contentPadding: EdgeInsets.all(9.0)),
               onChanged: (value) => _firstname = value,
               validator: (value) {
                 if (value!.isEmpty) {
@@ -50,10 +51,10 @@ class _CreateNewUserPageState extends State<CreateNewUserPage> {
                 }
                 return null;
               },
-              
             ),
-              TextFormField(
-              decoration: const InputDecoration(labelText: 'lastname',contentPadding:EdgeInsets.all(9.0)),
+            TextFormField(
+              decoration: const InputDecoration(
+                  labelText: 'lastname', contentPadding: EdgeInsets.all(9.0)),
               onChanged: (value) => _lastname = value,
               validator: (value) {
                 if (value!.isEmpty) {
@@ -63,7 +64,8 @@ class _CreateNewUserPageState extends State<CreateNewUserPage> {
               },
             ),
             TextFormField(
-              decoration: const InputDecoration(labelText: 'Email',contentPadding:EdgeInsets.all(9.0)),
+              decoration: const InputDecoration(
+                  labelText: 'Email', contentPadding: EdgeInsets.all(9.0)),
               onChanged: (value) => _email = value,
               validator: (value) {
                 if (value!.isEmpty) {
@@ -71,41 +73,52 @@ class _CreateNewUserPageState extends State<CreateNewUserPage> {
                 } else if (!EmailValidator.validate(value)) {
                   return 'Please enter a valid email address';
                 }
-                
+
                 return null;
               },
             ),
             TextFormField(
-            controller: _passwordController,
-            decoration: InputDecoration(
-              labelText: 'Password',
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _obscurePassword ? Icons.visibility : Icons.visibility_off,
+              controller: _passwordController,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
                 ),
-                onPressed: () {
-                  setState(() {
-                    _obscurePassword = !_obscurePassword;
-                  });
-                },
               ),
+              obscureText: _obscurePassword,
             ),
-            obscureText: _obscurePassword,
-           
-          ),
             TextFormField(
-              decoration: const InputDecoration(labelText: 'Retype Password',contentPadding:EdgeInsets.all(9.0)),
-              onChanged: (value) => _confirmPassword = value,
+              controller: _passwordController,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
+                ),
+              ),
+              obscureText: _obscurePassword,
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Please confirm your password';
+                  return 'Please enter your password';
                 }
-                if (value != _password) {
-                  return 'Passwords do not match';
+                if (!isPasswordValid(value)) {
+                  return 'Password must be at least 8 characters long and contain a combination of uppercase letters, lowercase letters, and numbers';
                 }
                 return null;
               },
-              obscureText: true,
             ),
             SizedBox(height: 10),
             ElevatedButton(
@@ -120,7 +133,10 @@ class _CreateNewUserPageState extends State<CreateNewUserPage> {
         ),
       ),
     );
+    bool isPasswordValid(String password) {
+      const passwordRegex = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$';
+      final regExp = RegExp(passwordRegex);
+      return regExp.hasMatch(password);
+    }
   }
-  
- }
- 
+}
