@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:email_validator/email_validator.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,7 +27,7 @@ class _CreateNewUserPageState extends State<CreateNewUserPage> {
   late String _email;
   late String _password;
   late String _confirmPassword;
-  final _passwordController = TextEditingController();
+   final _passwordController = TextEditingController();
   final _retypePasswordController = TextEditingController();
   bool _obscurePassword = true;
 
@@ -34,15 +35,14 @@ class _CreateNewUserPageState extends State<CreateNewUserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create New User'),
+        title: Text('Create New User'),
       ),
       body: Form(
         key: _formKey,
         child: Column(
           children: [
             TextFormField(
-              decoration: const InputDecoration(
-                  labelText: 'Firstname', contentPadding: EdgeInsets.all(9.0)),
+              decoration: InputDecoration(labelText: 'Firstname',contentPadding:EdgeInsets.all(9.0)),
               onChanged: (value) => _firstname = value,
               validator: (value) {
                 if (value!.isEmpty) {
@@ -50,10 +50,10 @@ class _CreateNewUserPageState extends State<CreateNewUserPage> {
                 }
                 return null;
               },
+              
             ),
-            TextFormField(
-              decoration: const InputDecoration(
-                  labelText: 'lastname', contentPadding: EdgeInsets.all(9.0)),
+              TextFormField(
+              decoration: const InputDecoration(labelText: 'lastname',contentPadding:EdgeInsets.all(9.0)),
               onChanged: (value) => _lastname = value,
               validator: (value) {
                 if (value!.isEmpty) {
@@ -63,32 +63,64 @@ class _CreateNewUserPageState extends State<CreateNewUserPage> {
               },
             ),
             TextFormField(
-              decoration: const InputDecoration(
-                  labelText: 'Email', contentPadding: EdgeInsets.all(9.0)),
+              decoration: const InputDecoration(labelText: 'Email',contentPadding:EdgeInsets.all(9.0)),
               onChanged: (value) => _email = value,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter your email';
+                } else if (!EmailValidator.validate(value)) {
+                  return 'Please enter a valid email address';
+                }
+                
+                return null;
+              },
             ),
             TextFormField(
-              controller: _passwordController,
-              decoration: const InputDecoration(
-                labelText: 'Password',
-              ),
-              obscureText: _obscurePassword,
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
-                  labelText: 'Retype Password',
-                  contentPadding: EdgeInsets.all(9.0)),
-              onChanged: (value) => _confirmPassword = value,
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
+            controller: _passwordController,
+            decoration: InputDecoration(
+              labelText: 'Password',
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                ),
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {}
+                  setState(() {
+                    _obscurePassword = !_obscurePassword;
+                  });
                 },
-                child: const Text('New User')),
+              ),
+            ),
+            obscureText: _obscurePassword,
+           
+          ),
+            TextFormField(
+              decoration: const InputDecoration(labelText: 'Retype Password',contentPadding:EdgeInsets.all(9.0)),
+              onChanged: (value) => _confirmPassword = value,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please confirm your password';
+                }
+                if (value != _password) {
+                  return 'Passwords do not match';
+                }
+                return null;
+              },
+              obscureText: true,
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  // TODO: Create new user
+                }
+              },
+              child: const Text(' New User'),
+            ),
           ],
         ),
       ),
     );
   }
-}
+  
+ }
+ 
