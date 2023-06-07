@@ -44,11 +44,23 @@ class _CreateNewUserPageState extends State<CreateNewUserPage> {
               decoration: const InputDecoration(
                   labelText: 'Firstname', contentPadding: EdgeInsets.all(9.0)),
               onChanged: (value) => _firstname = value,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter your firstname';
+                }
+                return null;
+              },
             ),
             TextFormField(
               decoration: const InputDecoration(
                   labelText: 'lastname', contentPadding: EdgeInsets.all(9.0)),
               onChanged: (value) => _lastname = value,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter your lastname';
+                }
+                return null;
+              },
             ),
             TextFormField(
               decoration: const InputDecoration(
@@ -64,21 +76,19 @@ class _CreateNewUserPageState extends State<CreateNewUserPage> {
             ),
             TextFormField(
               decoration: const InputDecoration(
-                labelText: 'Retype Password',
-                contentPadding: EdgeInsets.all(9.0)
-              ),
+                  labelText: 'Retype Password',
+                  contentPadding: EdgeInsets.all(9.0)),
               onChanged: (value) => _confirmPassword = value,
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              onPressed:() {
-                if (_formKey.currentState!.validate()){}
-              }, 
-              child: const Text('New User')),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {}
+                },
+                child: const Text('New User')),
           ],
         ),
       ),
     );
   }
 }
-
